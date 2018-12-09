@@ -130,6 +130,6 @@ difference(){
     translate([0, 0, base_hole_down]) rotate([90, 0, 0])
         cylinder(base_tickness + base_clamp_offset + 10, d = base_holes_diameter, center = true);
     // Outer
-    translate([0, base_tickness/2 + base_clamp_offset, base_hole_down]) rotate([90, 0, 0])
+    translate([0, (base_tickness + base_clamp_offset)/2, base_hole_down]) rotate([90, 0, 0])
         cylinder(base_clamp_offset + 3, d = base_holes_diameter + 2, center = true);
 }
