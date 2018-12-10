@@ -4,7 +4,7 @@ $fn = 80;
 
 // Base
 base_width = 30;
-base_height = 55;
+base_height = 58;
 base_tickness = 12;
 
 base_holes_offset = 8;
@@ -55,7 +55,7 @@ module clamp(height){
             difference(){
                 hull(){
                     translate([0, base_tickness/2 + 0.5, height/2]) rotate([90, 0, 0])
-                        cube([base_width, height, 1], center = true);
+                        cube([base_width + 20, height, 1], center = true);
 
                     linear_extrude(height)
                         translate([0, base_tickness/2 + base_clamp_offset + clamp_diameter/2, 0])
@@ -83,11 +83,29 @@ difference(){
         // Base
         linear_extrude(base_height)
             square([base_width, base_tickness], center = true);
+        
+        // Box
+        // Down
+        translate([0, -5, -15])
+            linear_extrude(15)
+                square([base_width + 20, base_tickness + 10], center = true);
+        // Up
+        translate([0, -5, base_height])
+            linear_extrude(15)
+                square([base_width + 20, base_tickness + 10], center = true);
+        // Left
+        translate([base_width/2 + 5, -5, 0])
+            linear_extrude(base_height)
+                square([10, base_tickness + 10], center = true);
+        // Right
+        translate([-(base_width/2 + 5), -5, 0])
+            linear_extrude(base_height)
+                square([10, base_tickness + 10], center = true);
 
         // Clamp
         clamp(clamp_height);
 
-        // Smooth Ramp
+        // Smooth Ramp Up
         intersection(){
             translate([0, 0, clamp_height])
                 clamp(15);
@@ -95,17 +113,37 @@ difference(){
             difference(){
                 translate([0, (base_tickness + base_clamp_offset + clamp_diameter + 9)/2, clamp_height])
                     linear_extrude(20)
-                        square([clamp_diameter + clamp_tickness + 3, base_clamp_offset + clamp_diameter + 9], center = true);
+                        square([clamp_diameter + clamp_tickness + 3 + 20, base_clamp_offset + clamp_diameter + 9], center = true);
 
                 translate([0, base_tickness/2 + 30, clamp_height + 15]) rotate([0, 90, 0])
-                    linear_extrude(clamp_diameter + clamp_tickness + 3, center = true)
+                    linear_extrude(clamp_diameter + clamp_tickness + 3 + 20, center = true)
                             resize([30, 60]) circle();
 
                 translate([0, base_tickness/2 + 40, clamp_height])
                     linear_extrude(15)
-                        square([clamp_diameter + clamp_tickness + 3, 21], center = true);
+                        square([clamp_diameter + clamp_tickness + 3 +20, 21], center = true);
             }
         }
+            
+        // Smooth Ramp Down
+        translate([0, 0, -15])
+            intersection(){
+                clamp(15);
+
+                difference(){
+                    translate([0, (base_tickness + base_clamp_offset + clamp_diameter + 9)/2, 0])
+                        linear_extrude(20)
+                            square([clamp_diameter + clamp_tickness + 3 + 20, base_clamp_offset + clamp_diameter + 9], center = true);
+
+                    translate([0, base_tickness/2 + 30, 0]) rotate([0, 90, 0])
+                        linear_extrude(clamp_diameter + clamp_tickness + 3 +20, center = true)
+                                resize([30, 60]) circle();
+
+                    translate([0, base_tickness/2 + 40, 0])
+                        linear_extrude(15)
+                            square([clamp_diameter + clamp_tickness + 3 + 20, 21], center = true);
+                }
+            }
     }
 
     // Screw holes
